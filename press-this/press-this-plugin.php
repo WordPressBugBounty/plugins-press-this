@@ -5,7 +5,7 @@
  * Plugin Name: Press This
  * Plugin URI:  https://wordpress.org
  * Description: A little tool that lets you grab bits of the web and create new posts with ease. Now powered by the Gutenberg block editor.
- * Version:     2.0.1
+ * Version:     2.0.2
  * Author:      WordPress Contributors
  * Author URI:  https://wordpress.org
  * License:     GPL-2.0+
@@ -34,7 +34,7 @@
  * @since 1.0.0
  * @since 2.0.1 Updated for Gutenberg block editor integration.
  */
-define( 'PRESS_THIS__VERSION', '2.0.1' );
+define( 'PRESS_THIS__VERSION', '2.0.2' );
 
 /**
  * Minimum WordPress version required for the Gutenberg features.
@@ -343,6 +343,11 @@ function press_this_rest_save_post( $request ) {
 	}
 
 	// Side-load images from content.
+	// Require admin includes needed by media_sideload_image() (not loaded in REST context).
+	require_once ABSPATH . 'wp-admin/includes/file.php';
+	require_once ABSPATH . 'wp-admin/includes/media.php';
+	require_once ABSPATH . 'wp-admin/includes/image.php';
+
 	$wp_press_this = new WP_Press_This_Plugin();
 	press_this_http_request_context( true );
 	$post_data['post_content'] = $wp_press_this->side_load_images( $post_id, wp_slash( $post_data['post_content'] ) );
